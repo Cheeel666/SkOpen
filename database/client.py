@@ -13,6 +13,7 @@ class DBconnection:
         self.rebuild_db = rebuild_db
         self.pg_conn = 0
 
+
     def get_connection(self):
         self.pg_conn = PostgresqlDatabase(
             database=self.db_name,
@@ -23,9 +24,10 @@ class DBconnection:
         )
         return self.pg_conn
 
-    def execute_query(self, query):
-        return self.pg_conn.execute(query)
 
+    # def execute_query(self, query):
+    #     self.curs.execute(str(query))
+    #     return self.curs.fetchone()
 
     def close_connection(self):
         self.pg_conn.close()

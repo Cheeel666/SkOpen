@@ -1,5 +1,3 @@
-drop database agregator;
-create database agregator;
 -- ok
 drop table if exists city;
 drop table if exists country;
@@ -87,4 +85,5 @@ create table log (
 	id_action integer NOT NULL,
 	dt_interaction timestamp
 );
+
 

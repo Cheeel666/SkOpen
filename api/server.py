@@ -57,11 +57,12 @@ class Server:
         username = request_body['username']
         password = request_body['password']
         email = request_body['email']
+        role = request_body['role']
         self.db_interaction.add_user_info(
             username=username,
             password=password,
             email=email,
-            role=3
+            role=role
         )
         return f'Successfuly added {username}', 201
 
@@ -102,19 +103,18 @@ class WebApplication:
             user=db_user,
             db_name=db_name,
             password=db_password,
-            rebuild_db=0
+            rebuild_db=1
         )
         db = DbInteraction('localhost', '5432', 'postgres', 'agregator', '', 0)
         server.run_server()
         
         while(0):
-            get_data()
-
+            run_cycle()
             time.sleep(300)
 
 
 
-    def get_data(self):
+    def run_cycle(self):
         pass
 
 
