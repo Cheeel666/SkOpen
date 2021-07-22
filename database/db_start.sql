@@ -23,6 +23,8 @@ create table courorts(
 	visability integer
 );
 
+insert into courorts values(0, 'Rosa', 'Sochi', 1);
+
 create table roads(
 	id_road serial PRIMARY KEY,
 	id_courort integer NOT NULL,

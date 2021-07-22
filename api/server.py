@@ -5,6 +5,7 @@ import argparse
 from flask import Flask, request, jsonify, abort
 from database.interaction.interaction import DbInteraction
 from database.exceptions import *
+from parser.parser import *
 import sys
 sys.path.append("../")
 from api.utils import *
@@ -51,6 +52,13 @@ class Server:
 
     def get_home(self):
         return "Api"
+
+    def update_data(self):
+        manager = ServiceFactory()
+        self.db_interaction.update_polyana(manager.getPolyana())
+        self.db_interaction.update_laura(manager.getLaura())
+        self.db_interaction.update_rosa(manager.getRosa())
+        return "Updated"
 
     def add_user_info(self):
         request_body = dict(request.json)
@@ -105,11 +113,11 @@ class WebApplication:
             password=db_password,
             rebuild_db=1
         )
-        db = DbInteraction('localhost', '5432', 'postgres', 'agregator', '', 0)
         server.run_server()
         
         while(0):
-            run_cycle()
+            self.run_cycle()
+            print("running")
             time.sleep(300)
 
 

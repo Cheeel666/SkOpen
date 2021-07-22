@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as BSHTML
 import logging
 import os
 
-FULLPATH = "/Users/ilchel/Desktop/projects/agregator/"
+FULLPATH = "/Users/ilchel/projects/SkOpen/"
 
 
 """ Абстрактный класс для реализации адаптеров курортов. """
@@ -302,6 +302,6 @@ class ServiceFactory:
 
 if __name__ == "__main__":
     obj = ServiceFactory()
-    data = obj.getLaura()
+    data = obj.getRosa()
     for i in range(len(data)):
         print(data[i])

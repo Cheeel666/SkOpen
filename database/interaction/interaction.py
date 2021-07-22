@@ -1,6 +1,8 @@
 from database.client import DBconnection
 from database.models.models import *
 from database.exceptions import *
+from parser.parser import *
+import psycopg2
 
 
 class DbInteraction:
@@ -11,13 +13,7 @@ class DbInteraction:
             self.rebuild()
 
     def rebuild(self):
-        MODELS = (Roads)
-        #self.postgres_connection.get_connection().drop_tables(MODELS)
-        self.postgres_connection.get_connection().create_tables(MODELS)
-        # curs = self.postgres_connection.get_connection().cursor()
-        # curs.execute(str(query))
-        # user = curs.fetchone()
-        # curs.close()
+
         return
 
     def connect(self):
@@ -50,10 +46,26 @@ class DbInteraction:
         query = City.insert(name_city=city, id_country=id_country)
         return query.execute()
 
+    def update_rosa(self, data):
+        query = Roads.delete().\
+            where(Roads.id_courort == Courorts.select(Courorts.id_courort).where(Courorts.name_courort == "Rosa"))
+        print(query)
+        data = data[10:12]
+        fields = (Roads.type_road, Roads.name_road, Roads.lenght, Roads.width, Roads.worktime, Roads.work_status)
+        query1 = Roads.insert_many(data, fields=fields)
+        print(query1)
+        return query1.execute()
 
+    def update_laura(self, data):
+        pass
+
+    def update_polyana(self, data):
+        pass
 
 if __name__ == "__main__":
     db = DbInteraction('127.0.0.1', '5432', 'postgres', 'agregator', '', 0)
     db.connect()
-    print(db.rebuild())
+    manager = ServiceFactory()
+    print(db.update_rosa(manager.getRosa()))
+    # print(manager.getRosa()[10])
     db.disconnect()
