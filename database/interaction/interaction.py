@@ -2,6 +2,7 @@ from database.client import DBconnection
 from database.models.models import *
 from database.exceptions import *
 from parser.parser import *
+from api.utils import parse_roads
 import psycopg2
 
 
@@ -49,12 +50,22 @@ class DbInteraction:
     def update_rosa(self, data):
         query = Roads.delete().\
             where(Roads.id_courort == Courorts.select(Courorts.id_courort).where(Courorts.name_courort == "Rosa"))
-        print(query)
-        data = data[10:12]
+        # print(query)
+        query.execute()
+
+        rosa_lifts, rosa_trails = parse_roads(data)
+        print("OK: ", len(data) == len(rosa_lifts) + len(rosa_trails))
+
         fields = (Roads.type_road, Roads.name_road, Roads.lenght, Roads.width, Roads.worktime, Roads.work_status)
-        query1 = Roads.insert_many(data, fields=fields)
-        print(query1)
-        return query1.execute()
+        query_lifts = Roads.insert_many(rosa_lifts, fields=fields)
+        print("lifts insert: \n", query_lifts)
+        query_lifts.execute()
+
+        fields = (Roads.type_road, Roads.name_road, Roads.complexity, Roads.lenght, Roads.width, Roads.work_status)
+        query_trails = Roads.insert_many(rosa_trails, fields=fields)
+        print("Trails insert: \n", query_trails)
+        query_trails.execute()
+        return 0
 
     def update_laura(self, data):
         pass
@@ -67,5 +78,5 @@ if __name__ == "__main__":
     db.connect()
     manager = ServiceFactory()
     print(db.update_rosa(manager.getRosa()))
-    # print(manager.getRosa()[10])
+    # print(manager.getLaura())
     db.disconnect()
