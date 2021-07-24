@@ -48,35 +48,55 @@ class DbInteraction:
         return query.execute()
 
     def update_rosa(self, data):
-        query = Roads.delete().\
-            where(Roads.id_courort == Courorts.select(Courorts.id_courort).where(Courorts.name_courort == "Rosa"))
-        # print(query)
-        query.execute()
+        rosa_lifts, rosa_trails = parse_roads(data, 0)
+        # print("OK: ", len(data) == len(rosa_lifts) + len(rosa_trails))
 
-        rosa_lifts, rosa_trails = parse_roads(data)
-        print("OK: ", len(data) == len(rosa_lifts) + len(rosa_trails))
-
-        fields = (Roads.type_road, Roads.name_road, Roads.lenght, Roads.width, Roads.worktime, Roads.work_status)
+        fields = (Roads.type_road, Roads.name_road, Roads.lenght, Roads.width, Roads.worktime, Roads.work_status, Roads.id_courort)
         query_lifts = Roads.insert_many(rosa_lifts, fields=fields)
-        print("lifts insert: \n", query_lifts)
         query_lifts.execute()
 
-        fields = (Roads.type_road, Roads.name_road, Roads.complexity, Roads.lenght, Roads.width, Roads.work_status)
+        fields = (Roads.type_road, Roads.name_road, Roads.complexity, Roads.lenght, Roads.width, Roads.work_status, Roads.id_courort)
         query_trails = Roads.insert_many(rosa_trails, fields=fields)
-        print("Trails insert: \n", query_trails)
         query_trails.execute()
-        return 0
 
     def update_laura(self, data):
-        pass
+        laura_lifts, laura_trails = parse_roads(data, 1)
+        fields = (Roads.type_road, Roads.name_road, Roads.worktime, Roads.work_status,
+                  Roads.id_courort)
+        query_lifts = Roads.insert_many(laura_lifts, fields=fields)
+        query_lifts.execute()
+
+        # fields = (Roads.type_road, Roads.name_road, Roads.complexity, Roads.lenght, Roads.width, Roads.work_status,
+        #           Roads.id_courort)
+        # query_trails = Roads.insert_many(laura_trails, fields=fields)
+        # query_trails.execute()
 
     def update_polyana(self, data):
-        pass
+        polyana_lifts, polyana_trails = parse_roads(data, 2)
+
+        fields = (Roads.type_road, Roads.name_road, Roads.work_status,
+                  Roads.id_courort)
+        query_lifts = Roads.insert_many(polyana_lifts, fields=fields)
+        query_lifts.execute()
+
+        fields = (Roads.type_road, Roads.name_road, Roads.work_status,
+                  Roads.id_courort)
+        query_trails = Roads.insert_many(polyana_trails, fields=fields)
+        query_trails.execute()
+
+    def update_roads(self):
+        Roads._schema.truncate_table(restart_identity=True)
+
+        manager = ServiceFactory()
+        self.update_rosa(manager.getRosa())
+        self.update_polyana(manager.getPolyana())
+        self.update_laura(manager.getLaura())
 
 if __name__ == "__main__":
-    db = DbInteraction('127.0.0.1', '5432', 'postgres', 'agregator', '', 0)
+    db = DbInteraction('127.0.0.1', '5555', 'ilchel', 'agregator', 'password', 0)
     db.connect()
     manager = ServiceFactory()
-    print(db.update_rosa(manager.getRosa()))
+    # ALTER SEQUENCE roads_id_road_seq restart with 1;
+    print(db.update_roads())
     # print(manager.getLaura())
     db.disconnect()

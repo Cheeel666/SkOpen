@@ -123,14 +123,14 @@ class Laura(Courort):
 
         for i in range(1, len(trails)):
             soup = BSHTML(str(trails[i]), "lxml")
-            name = soup.find("div", {"class": "lift_name"})
+            # name = soup.find("div", {"class": "lift_name"})
             route = soup.find("div", {"class": "lift_route"})
             time = soup.find("a")
             work = soup.findAll("td")[-1].get_text().strip()
             trailsFinal.append(
                 [
                     "lift",
-                    name.get_text(),
+                    # name.get_text(),
                     route.get_text(),
                     time.get_text(),
                     lauraCheckWork(work),

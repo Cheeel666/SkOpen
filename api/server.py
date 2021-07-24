@@ -29,7 +29,7 @@ class Server:
         self.app.add_url_rule("/", view_func=self.get_home)
         self.app.add_url_rule("/home", view_func=self.get_home)
         self.app.add_url_rule("/add_user_info", view_func=self.add_user_info, methods=['POST'])
-
+        self.app.add_url_rule("/update", view_func=self.update_data)
         self.app.register_error_handler(404, self.page_not_found)
 
     def page_not_found(self, error_description):
@@ -54,10 +54,7 @@ class Server:
         return "Api"
 
     def update_data(self):
-        manager = ServiceFactory()
-        self.db_interaction.update_polyana(manager.getPolyana())
-        self.db_interaction.update_laura(manager.getLaura())
-        self.db_interaction.update_rosa(manager.getRosa())
+        self.db_interaction.update_roads()
         return "Updated"
 
     def add_user_info(self):

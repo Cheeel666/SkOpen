@@ -8,10 +8,11 @@ def config_parser(config_path):
         return config
 
 
-def parse_roads(data):
+def parse_roads(data, id_courort):
     lifts = []
     trails = []
     for i in range(len(data)):
+        data[i].append(id_courort)
         if data[i][0] == 'lift':
             lifts.append(data[i])
         else:
