@@ -1,7 +1,5 @@
-from psycopg2 import OperationalError
-from peewee import *
-from playhouse.postgres_ext import PostgresqlExtDatabase
 from database.models.models import *
+
 
 class DBconnection:
     def __init__(self, host, port, user, db_name, password, rebuild_db=False):
@@ -13,7 +11,6 @@ class DBconnection:
         self.rebuild_db = rebuild_db
         self.pg_conn = 0
 
-
     def get_connection(self):
         self.pg_conn = PostgresqlDatabase(
             database=self.db_name,
@@ -24,11 +21,6 @@ class DBconnection:
         )
         return self.pg_conn
 
-
-    # def execute_query(self, query):
-    #     self.curs.execute(str(query))
-    #     return self.curs.fetchone()
-
     def close_connection(self):
         self.pg_conn.close()
 
@@ -38,7 +30,5 @@ if __name__ == "__main__":
         host="127.0.0.1", port=5432, user="postgres", db_name="agregator", password=""
     )
     print(dbcon.get_connection())
-
-
     dbcon.close_connection()
 

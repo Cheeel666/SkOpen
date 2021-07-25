@@ -240,7 +240,7 @@ class RosaChutor(Courort):
                     str(name.contents[2]).strip(),
                     distance.contents[3].get_text(),
                     people.contents[3].get_text(),
-                    str(time.contents[1].get_text().strip()),
+                    " ".join(str(time.contents[1].get_text().strip()).replace("\n", " ").split()),
                     rosaChekIfOpen(str(status.contents).strip())
                 ]
             )

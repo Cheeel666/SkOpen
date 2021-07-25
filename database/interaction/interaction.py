@@ -85,18 +85,23 @@ class DbInteraction:
         query_trails.execute()
 
     def update_roads(self):
+        manager = ServiceFactory()
+        rosa_data = manager.getRosa()
+        laura_data = manager.getLaura()
+        polyana_data = manager.getPolyana()
+
         Roads._schema.truncate_table(restart_identity=True)
 
-        manager = ServiceFactory()
-        self.update_rosa(manager.getRosa())
-        self.update_polyana(manager.getPolyana())
-        self.update_laura(manager.getLaura())
+        self.update_rosa(rosa_data)
+        self.update_laura(laura_data)
+        self.update_polyana(polyana_data)
+
 
 if __name__ == "__main__":
     db = DbInteraction('127.0.0.1', '5555', 'ilchel', 'agregator', 'password', 0)
     db.connect()
     manager = ServiceFactory()
-    # ALTER SEQUENCE roads_id_road_seq restart with 1;
+
     print(db.update_roads())
-    # print(manager.getLaura())
+
     db.disconnect()

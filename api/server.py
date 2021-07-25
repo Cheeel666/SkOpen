@@ -29,7 +29,6 @@ class Server:
         self.app.add_url_rule("/", view_func=self.get_home)
         self.app.add_url_rule("/home", view_func=self.get_home)
         self.app.add_url_rule("/add_user_info", view_func=self.add_user_info, methods=['POST'])
-        self.app.add_url_rule("/update", view_func=self.update_data)
         self.app.register_error_handler(404, self.page_not_found)
 
     def page_not_found(self, error_description):
@@ -47,11 +46,20 @@ class Server:
         self.server = threading.Thread(
             target=self.app.run, kwargs={"host": self.host, "port": self.port}
         )
+        self.parse_data = threading.Thread(target=self.run_cycle)
+
         self.server.start()
+        self.parse_data.start()
         return self.server
 
     def get_home(self):
         return "Api"
+
+    def run_cycle(self):
+        while(1):
+            self.update_data()
+            print("running")
+            time.sleep(300)
 
     def update_data(self):
         self.db_interaction.update_roads()
@@ -70,7 +78,6 @@ class Server:
             role=role
         )
         return f'Successfuly added {username}', 201
-
 
     def get_user_info(self, username):
         try:
@@ -111,16 +118,6 @@ class WebApplication:
             rebuild_db=1
         )
         server.run_server()
-        
-        while(0):
-            self.run_cycle()
-            print("running")
-            time.sleep(300)
-
-
-
-    def run_cycle(self):
-        pass
 
 
 if __name__ == "__main__":
