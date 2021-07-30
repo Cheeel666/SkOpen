@@ -1,0 +1,4 @@
+log/
+__init__.py
+*.txt
+/venv
