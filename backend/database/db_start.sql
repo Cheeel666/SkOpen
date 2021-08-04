@@ -89,3 +89,6 @@ create table log (
 );
 
 
+insert into roles values (0, 'admin', 1, 1, 1, 1);
+insert into roles values (1, 'user', 0, 0, 0, 1);
+insert into users values (0, 'ilya', 'il_chel@mail.ru', '12345', 0);

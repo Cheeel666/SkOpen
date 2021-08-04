@@ -1,13 +1,20 @@
+import sys
+sys.path.insert(0, '/Users/ilchel/projects/SkOpen/backend')
 import time
 import threading
 import requests
 import argparse
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
+
+from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
+
 from database.interaction.interaction import DbInteraction
 from database.exceptions import *
 from parser.parser import *
 import sys
+
+
 sys.path.append("../")
 from api.utils import *
 
@@ -27,12 +34,15 @@ class Server:
         )
 
         self.app = Flask(__name__)
+        self.app.config['SECRET_KEY'] = 'super-secret'
         self.cors = CORS(self.app)
+        self.jwt = JWTManager(self.app)
         self.app.config.from_object(__name__)
         self.app.add_url_rule("/shutdown", view_func=self.shutdown)
         self.app.add_url_rule("/ping", view_func=self.get_home)
         self.app.add_url_rule("/home", view_func=self.get_home)
-        self.app.add_url_rule("/add_user_info", view_func=self.add_user_info, methods=['POST'])
+        self.app.add_url_rule("/add_user", view_func=self.add_user_info, methods=['POST'])
+        self.app.add_url_rule("/login", view_func=self.login, methods=['POST'])
         self.app.add_url_rule("/get_courorts", view_func=self.get_courorts)
         self.app.add_url_rule("/get_rosa", view_func=self.get_rosa)
         self.app.add_url_rule("/get_gorod", view_func=self.get_gorod)
@@ -71,6 +81,18 @@ class Server:
             print("running")
             time.sleep(300)
 
+    def login(self):
+        request_body = dict(request.json)
+        password = request_body['password']
+        email = request_body['email']
+        user = self.db_interaction.get_user(email, password)
+        if user is None:
+            return 'Неправильное имя пользователя или пароль', 401
+
+        token = create_access_token(identity=user[1])
+        # print("result: ",jsonify({'auth': True, 'token':token  , 'user':user[0]}), token)
+        return jsonify({'auth': True, 'token':token  , 'user':user[0], 'is_admin': user[4]})
+
     def update_data(self):
         self.db_interaction.update_roads()
         return "Updated"
@@ -81,6 +103,9 @@ class Server:
         password = request_body['password']
         email = request_body['email']
         role = request_body['role']
+        test = self.db_interaction.check_user(email)
+        if type(test) is tuple:
+            abort(409, description='User already exists')
         self.db_interaction.add_user_info(
             username=username,
             password=password,
@@ -148,5 +173,5 @@ if __name__ == "__main__":
     
 
 
-#python3 server.py --config=/Users/ilchel/projects/SkOpen/api/config.txt
+#python3 api/server.py --config=/Users/ilchel/projects/SkOpen/backend/api/config.txt
 

@@ -2,7 +2,8 @@ from database.client import DBconnection
 from database.models.models import *
 from database.exceptions import *
 from parser.parser import *
-from backend.api import parse_roads
+from api.utils import parse_roads
+import psycopg2
 
 
 class DbInteraction:
@@ -22,7 +23,7 @@ class DbInteraction:
     def disconnect(self):
         self.postgres_connection.close_connection()
 
-    def add_user_info(self, username, email, password, role):
+    def add_user_info(self, username, email, password, role=1):
         query = Users.insert(name=username, password=password, email=email, id_role=role)
         return query.execute()
 
@@ -90,6 +91,21 @@ class DbInteraction:
         self.update_laura(laura_data)
         self.update_polyana(polyana_data)
 
+    def get_user(self, mail, password):
+        query = "select name, id_user, email, password, id_role from users where email = '" + str(mail) + "' and password = '" + str(password)+"'limit 1;"
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        res = cur.fetchone()
+        self.postgres_connection.close_connection()
+        return res
+
+    def check_user(self, mail):
+        query = "select email from users where email = '" + str(mail) + "' limit 1;"
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        res = cur.fetchone()
+        self.postgres_connection.close_connection()
+        return res
 
     def get_courorts(self):
         query = """

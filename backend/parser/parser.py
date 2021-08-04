@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as BSHTML
 import logging
 import os
 
-FULLPATH = "/Users/ilchel/projects/SkOpen/"
+FULLPATH = "/Users/ilchel/projects/SkOpen/backend/"
 
 
 """ Абстрактный класс для реализации адаптеров курортов. """

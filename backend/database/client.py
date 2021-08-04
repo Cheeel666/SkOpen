@@ -1,5 +1,5 @@
 from database.models.models import *
-
+import psycopg2
 
 class DBconnection:
     def __init__(self, host, port, user, db_name, password, rebuild_db=False):
