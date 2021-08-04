@@ -8,9 +8,15 @@
     </div>
         <h1>Welcome to  users page</h1>
         <h2>{{msg}}</h2>
+        <h3>admin: {{admin}}</h3>
         <button type="submit" @click="handleSubmit">
             Выход
         </button>
+            <div v-if="admin=='true'">
+                <button type="submit" @click="adminPage">
+                    admin
+                </button>
+            </div>
     </div>
 </template>
 
@@ -19,7 +25,8 @@
 export default {
     data () {
         return {
-            msg: 'Имя пользователя: ' + localStorage.getItem('user')
+            msg: 'Имя пользователя: ' + localStorage.getItem('user'),
+            admin: localStorage.getItem('admin')
         }
     },
     methods: {
@@ -29,8 +36,12 @@ export default {
         localStorage.removeItem('user');
         this.$emit('loggedOut')
         this.$router.push('/login');
-        }
-    }
+        },
+        adminPage(e) {
+            e.preventDefault();
+            this.$router.push('/admin');
+        },
+    },
 }
 </script>
 

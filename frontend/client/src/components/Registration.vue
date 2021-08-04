@@ -65,22 +65,30 @@
                         role: 1
                     })
                     .then(response => {
-                        localStorage.setItem('user',JSON.stringify(response.data.user))
-                        localStorage.setItem('jwt',response.data.token)
-                        localStorage.setItem('admin', false)
-                        if (localStorage.getItem('jwt') != null){
-                            this.$emit('loggedIn')
-                            if(this.$route.params.nextUrl != null){
+                        if(this.$route.params.nextUrl != null){
                                 this.$router.push(this.$route.params.nextUrl)
                             }
                             else{
-                                this.$router.push('/')
+                                this.$router.push('/login')
                             }
-                        }
                     })
-                    .catch(error => {
-                        console.error(error);
-                    });
+                    // .then(response => {
+                    //     localStorage.setItem('user',JSON.stringify(response.data.user))
+                    //     localStorage.setItem('jwt',response.data.token)
+                    //     localStorage.setItem('admin', false)
+                    //     if (localStorage.getItem('jwt') != null || localStorage.getItem('jwt') != undefined ){
+                    //         this.$emit('loggedIn')
+                    //         if(this.$route.params.nextUrl != null){
+                    //             this.$router.push(this.$route.params.nextUrl)
+                    //         }
+                    //         else{
+                    //             this.$router.push('/')
+                    //         }
+                    //     }
+                    // })
+                    // .catch(error => {
+                    //     console.error(error);
+                    // });
                 } else {
                     this.password = ""
                     this.passwordConfirm = ""

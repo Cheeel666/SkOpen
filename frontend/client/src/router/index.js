@@ -11,7 +11,7 @@ import Profile from '@/components/Profile';
 import Admin from '@/components/Admin';
 
 Vue.use(Router);
-
+/* eslint-disable */
 
 const router = new Router({
   routes: [
