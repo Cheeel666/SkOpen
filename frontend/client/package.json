@@ -20,6 +20,8 @@
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "rest-admin": "0.0.1",
+    "v-markdown": "^1.0.2",
+    "v-markdown-editor": "^1.2.6",
     "vee-validate": "^2.2.15",
     "vue": "^2.5.2",
     "vue-comment-grid": "^1.0.12",

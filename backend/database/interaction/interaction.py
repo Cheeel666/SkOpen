@@ -63,6 +63,21 @@ class DbInteraction:
         query = Users.delete().where(Users.email==email)
         query.execute()
 
+    def add_comment(self, email, text, id_courort):
+        cur = self.postgres_connection.get_connection().cursor()
+
+        query = "select id_user from users where email = '" + str(email) + "';"
+        # print(query)
+        cur.execute(query)
+        id_user = cur.fetchone()[0]
+        self.postgres_connection.close_connection()
+        cur = self.postgres_connection.get_connection().cursor()
+        query = "insert into comment (id_user, id_courort, content, likes, visability) values (" + str(id_user)+\
+                ", " + str(id_courort) + ", '" + str(text) + "',0,0)"
+        # print(query)
+        cur.execute(query)
+        self.postgres_connection.pg_conn.commit()
+        self.postgres_connection.close_connection()
 
     def update_laura(self, data):
         laura_lifts, laura_trails = parse_roads(data, 1)
