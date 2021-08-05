@@ -13,8 +13,8 @@
           <thead>
             <tr>
               <th scope="col">Курорт</th>
-              <th scope="col">Город</th>
-              <th scope="col">Отслеживать</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -23,7 +23,7 @@
               <td>{{ courort.name_courort }}</td>
               <td>{{ courort.city }}</td>
               <td>
-                <button type="button" class="btn btn-warning btn-sm">Следить</button>
+                <button type="button" class="btn btn-warning btn-sm">Смотреть</button>
               </td>
               </router-link>
             </tr>

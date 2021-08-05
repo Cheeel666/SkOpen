@@ -26,7 +26,8 @@ export default {
     data () {
         return {
             msg: 'Имя пользователя: ' + localStorage.getItem('user'),
-            admin: localStorage.getItem('admin')
+            admin: localStorage.getItem('admin'),
+            token: localStorage.getItem('jwt')
         }
     },
     methods: {

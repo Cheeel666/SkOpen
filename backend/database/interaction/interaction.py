@@ -59,6 +59,11 @@ class DbInteraction:
         query_trails = Roads.insert_many(rosa_trails, fields=fields)
         query_trails.execute()
 
+    def delete_user_by_email(self, email):
+        query = Users.delete().where(Users.email==email)
+        query.execute()
+
+
     def update_laura(self, data):
         laura_lifts, laura_trails = parse_roads(data, 1)
         fields = (Roads.type_road, Roads.name_road, Roads.worktime, Roads.work_status,

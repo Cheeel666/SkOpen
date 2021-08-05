@@ -77,9 +77,9 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       if (to.matched.some(record => record.meta.is_admin)) {
-        if (localStorage.getItem('admin') === false) {
+        if (localStorage.getItem('admin') === 'false') {
           next({
-            name: 'Home',
+            name: 'Profile',
           });
         } else {
           next();

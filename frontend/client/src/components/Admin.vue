@@ -21,8 +21,8 @@
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
               <td> {{ user.role }}</td>
-              <td>
-                <button type="submit" @click="deleteUser" class="btn btn-danger btn-sm">
+              <td v-if="user.role =='user'">
+                <button type="submit" @click="deleteUser(user.email)" class="btn btn-danger btn-sm">
                     Удалить
                 </button>
               </td>
@@ -53,6 +53,13 @@ import axios from 'axios';
           // eslint-disable-next-line
                 console.error(error);
             });
+          },
+          deleteUser(email) {
+            this.$http.post('//localhost:5005/delete_user', {
+            email: email,
+          })
+            this.$emit('userDeleted')
+            this.$router.go()
           },
         },
         created() {

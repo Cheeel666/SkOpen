@@ -48,6 +48,7 @@ class Server:
         self.app.add_url_rule("/get_gorod", view_func=self.get_gorod)
         self.app.add_url_rule("/get_laura", view_func=self.get_laura)
         self.app.add_url_rule("/get_all_users", view_func=self.get_all_users)
+        self.app.add_url_rule("/delete_user", view_func=self.delete_user, methods=['POST'])
         # self.app.add_url_rule("/get_courorts", view_func=self.)
         self.app.register_error_handler(404, self.page_not_found)
 
@@ -96,6 +97,12 @@ class Server:
     def update_data(self):
         self.db_interaction.update_roads()
         return "Updated"
+
+    def delete_user(self):
+        request_body = dict(request.json)
+        email = request_body['email']
+        self.db_interaction.delete_user_by_email(email)
+        return f'Successfuly deleted {email}', 201
 
     def add_user_info(self):
         request_body = dict(request.json)

@@ -14,7 +14,8 @@
     export default {
         data () {
             return {
-                msg: 'Hello World!'
+                msg: 'Hello World!',
+                user: localStorage.getItem('user')
             }
         }
     }
