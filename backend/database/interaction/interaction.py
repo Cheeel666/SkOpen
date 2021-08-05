@@ -91,6 +91,18 @@ class DbInteraction:
         self.update_laura(laura_data)
         self.update_polyana(polyana_data)
 
+    def get_all_users(self):
+        query = """
+        select array_to_json(array_agg(lap))
+        from (select t1.name, t1.email, t2.title AS "role" 
+        from users t1 join roles t2 on t1.id_role = t2.id_role) lap;
+        """
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        res = cur.fetchall()
+        self.postgres_connection.close_connection()
+        return res
+
     def get_user(self, mail, password):
         query = "select name, id_user, email, password, id_role from users where email = '" + str(mail) + "' and password = '" + str(password)+"'limit 1;"
         cur = self.postgres_connection.get_connection().cursor()

@@ -47,7 +47,7 @@ class Server:
         self.app.add_url_rule("/get_rosa", view_func=self.get_rosa)
         self.app.add_url_rule("/get_gorod", view_func=self.get_gorod)
         self.app.add_url_rule("/get_laura", view_func=self.get_laura)
-
+        self.app.add_url_rule("/get_all_users", view_func=self.get_all_users)
         # self.app.add_url_rule("/get_courorts", view_func=self.)
         self.app.register_error_handler(404, self.page_not_found)
 
@@ -120,6 +120,12 @@ class Server:
             return user_info, 200
         except UserNotFoundException:
             abort(404, description='User not found')
+
+    def get_all_users(self):
+        users = self.db_interaction.get_all_users()
+        if len(users) == 0:
+            return 404
+        return jsonify(users[0][0]), 200
 
     def get_courorts(self):
         print("get_courorts")

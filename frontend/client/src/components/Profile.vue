@@ -6,7 +6,7 @@
             <a href="/login">Вход</a>
             <a href="/register">Регистрация</a>
     </div>
-        <h1>Welcome to  users page</h1>
+        <h1>Добро пожаловать в профиль!</h1>
         <h2>{{msg}}</h2>
         <h3>admin: {{admin}}</h3>
         <button type="submit" @click="handleSubmit">
