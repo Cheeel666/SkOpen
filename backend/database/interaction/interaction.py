@@ -63,6 +63,11 @@ class DbInteraction:
         query = Users.delete().where(Users.email==email)
         query.execute()
 
+    def delete_comment(self, email, text, id_courort):
+        id_user = Users.select(Users.id_user).where(Users.email==email)
+        query = Comment.delete().where(Comment.id_user==id_user and Comment.content==text and Comment.id_courort==id_courort)
+        query.execute()
+
     def add_comment(self, email, text, id_courort):
         cur = self.postgres_connection.get_connection().cursor()
 
