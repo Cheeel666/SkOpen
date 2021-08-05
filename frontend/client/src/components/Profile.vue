@@ -27,8 +27,7 @@ export default {
         return {
             msg: 'Имя пользователя: ' + localStorage.getItem('user'),
             admin: localStorage.getItem('admin'),
-            token: localStorage.getItem('jwt')
-        }
+            }
     },
     methods: {
         handleSubmit(e) {

@@ -15,7 +15,6 @@
         data () {
             return {
                 msg: 'Hello World!',
-                user: localStorage.getItem('user')
             }
         }
     }
