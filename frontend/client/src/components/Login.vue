@@ -50,6 +50,8 @@ export default {
             }
             localStorage.setItem('user', JSON.stringify(response
               .data.user))
+            localStorage.setItem('email', response
+              .data.email)
             localStorage.setItem('jwt', response.data.token)
             localStorage.setItem('admin', is_admin)
             

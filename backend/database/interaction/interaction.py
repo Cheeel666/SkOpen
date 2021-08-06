@@ -64,9 +64,12 @@ class DbInteraction:
         query.execute()
 
     def delete_comment(self, email, text, id_courort):
-        id_user = Users.select(Users.id_user).where(Users.email==email)
-        query = Comment.delete().where(Comment.id_user==id_user and Comment.content==text and Comment.id_courort==id_courort)
-        query.execute()
+        query = "delete from comment where id_user = (select id_user from users where email = {email}) and content = {text} and id_courort = {id_courort};"\
+            .format(email="'"+email+"'", text="'"+str(text)+"'", id_courort=int(id_courort))
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        self.postgres_connection.pg_conn.commit()
+        self.postgres_connection.close_connection()
 
     def add_comment(self, email, text, id_courort):
         cur = self.postgres_connection.get_connection().cursor()
@@ -83,6 +86,18 @@ class DbInteraction:
         cur.execute(query)
         self.postgres_connection.pg_conn.commit()
         self.postgres_connection.close_connection()
+
+    def show_comments(self, id_courort):
+        query = """
+        select array_to_json(array_agg(lap))
+        from
+        (select t1.content as text, t2.email as email from comment t1 join users t2 on t1.id_user = t2.id_user where id_courort = '{}') lap;
+        """.format(str(id_courort))
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        res = cur.fetchall()
+        self.postgres_connection.close_connection()
+        return res
 
     def update_laura(self, data):
         laura_lifts, laura_trails = parse_roads(data, 1)

@@ -50,6 +50,7 @@ class Server:
         self.app.add_url_rule("/get_all_users", view_func=self.get_all_users)
         self.app.add_url_rule("/delete_user", view_func=self.delete_user, methods=['POST'])
         self.app.add_url_rule("/add_comment", view_func=self.add_comment, methods=['POST'])
+        self.app.add_url_rule("/get_comments", view_func=self.get_comments, methods=['POST'])
         self.app.add_url_rule("/delete_comment", view_func=self.delete_comment, methods=['POST'])
         # self.app.add_url_rule("/get_courorts", view_func=self.)
         self.app.register_error_handler(404, self.page_not_found)
@@ -94,7 +95,7 @@ class Server:
 
         token = create_access_token(identity=user[1])
         # print("result: ",jsonify({'auth': True, 'token':token  , 'user':user[0]}), token)
-        return jsonify({'auth': True, 'token':token  , 'user':user[0], 'is_admin': user[4]})
+        return jsonify({'auth': True, 'token':token  , 'user':user[0], 'is_admin': user[4], 'email':user[2]})
 
     def update_data(self):
         self.db_interaction.update_roads()
@@ -113,7 +114,7 @@ class Server:
         id_courort = request_body['id_courort']
         self.db_interaction.delete_comment(email, text, id_courort)
         return f'Successfuly deleted', 201
-    
+
     def add_comment(self):
         request_body = dict(request.json)
         email = request_body['email']
@@ -121,6 +122,12 @@ class Server:
         id_courort = request_body['id_courort']
         self.db_interaction.add_comment(email, text, id_courort)
         return f'Successfuly added', 201
+
+    def get_comments(self):
+        request_body = dict(request.json)
+        id_courort = request_body['id_courort']
+        comments = self.db_interaction.show_comments(id_courort)
+        return jsonify(comments[0][0])
 
     def add_user_info(self):
         request_body = dict(request.json)

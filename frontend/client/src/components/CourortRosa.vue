@@ -32,28 +32,23 @@
     <div class="comments-outside">
     <div class="comments-header">
         <div class="comments-stats">
-            <span><i class="fa fa-thumbs-up"></i> [[ likes ]]</span>
-            <span><i class="fa fa-comment"></i> [[ comments.length ]]</span>
+            <span><i class="fa fa-comment"></i>Комментариев: {{ comments.length }}</span>
         </div>
     </div>
 </div>
   <div>
       <div class="comment-form">
         <textarea type="text" v-model="comment"
-        placeholder="Comment is here: with markdown"></textarea>
-        <label>
-          <input type="text" v-model="author"
-          v-on: keyup="addComment | key enter"
-          placeholder="Author name here:">
-        </label>
-        <button v-on: click="addComment">Add Comment</button>
+        placeholder="Comment is here:"></textarea>
+        <button @click="addComment">Добавить комментарий</button>
    </div>
-    <div v-repeat="comments" class="comments-box">
+    <div v-for="(comment, index) in comments" :key = "index" class="comments-box">
          <p class="author">
-           {{author}}: {{hours}}
+           {{comment.email}}
         </p>
-        <p v-html="content | marked" class="content-comment"></p>
-        <p v-on: click="removeComment($index)" class="delete">Delete</p>
+        <p class="content-comment"> {{comment.text}}</p>
+        <p v-if="admin=='true'"
+        @click="removeComment(comment.email, comment.text)" class="delete">Удалить</p>
     </div>
 </div>
   </div>
@@ -68,10 +63,11 @@ export default {
     return {
       courorts: [],
       comments: [],
+      admin: localStorage.getItem('admin'),
     };
   },
   methods: {
-    getBooks() {
+    getTraces() {
       const path = 'http://localhost:5005/get_rosa';
       axios.get(path)
         .then((res) => {
@@ -82,22 +78,55 @@ export default {
           console.error(error);
         });
     },
+    getComments() {
+      this.$http.post('//localhost:5005/get_comments', {
+                id_courort: "0"
+            })
+            .then(response => {
+              this.comments = response.data
+            })
+            .catch(function (error) {
+              console.error(error.response);
+            });
+    },
     addComment: function() {
-            if(this.author && this.comment){
-                this.comments.push({author: this.author, content: this.comment})
+            if(this.comment){
+              this.$http.post('//localhost:5005/add_comment', {
+                email: localStorage.getItem('email'),
+                text: this.comment,
+                id_courort: 0
+            })
+            .then(response => {
+              alert('Success')
+              this.$emit('commentAdded')
+              this.$router.go()
+            })
+            .catch(function (error) {
+              console.error(error.response);
+            });
             }else{
-                alert('Fields Empty');
+                alert('Введите комментарий');
             }
         },
-    removeComment: function(index){
-            this.comments.remove(index);
+    removeComment: function(e, t){
+            this.$http.post('//localhost:5005/delete_comment', {
+                email: e,
+                text: t,
+                id_courort: 0
+            })
+            .then(response => {
+              alert('Success')
+              this.$emit('commentDeleted')
+              this.$router.go()
+            })
+            .catch(function (error) {
+              console.error(error.response);
+            });
         },
     },
-    filters: {
-        marked: marked
-    },
   created() {
-    this.getBooks();
+    this.getTraces();
+    this.getComments();
   },
 };
 </script>
