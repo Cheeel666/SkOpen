@@ -23,8 +23,8 @@ class DbInteraction:
     def disconnect(self):
         self.postgres_connection.close_connection()
 
-    def add_user_info(self, username, email, password, role=1):
-        query = Users.insert(name=username, password=password, email=email, id_role=role)
+    def add_user_info(self, username, email, password, role="user"):
+        query = Users.insert(name=username, password=password, email=email, user_role=role)
         return query.execute()
 
     def get_user_info(self, username):
@@ -60,8 +60,21 @@ class DbInteraction:
         query_trails.execute()
 
     def delete_user_by_email(self, email):
+        query_comm = "delete from comment where id_user = (select id_user from users where email = 'a' limit 1)"
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query_comm)
+        self.postgres_connection.pg_conn.commit()
+        
         query = Users.delete().where(Users.email==email)
         query.execute()
+
+    def make_mod_by_email(self, email):
+        query_comm = "update users set user_role = 'mod' where email = '" +str(email) + "   ';"
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query_comm)
+        self.postgres_connection.pg_conn.commit()
+
+
 
     def delete_comment(self, email, text, id_courort):
         query = "delete from comment where id_user = (select id_user from users where email = {email}) and content = {text} and id_courort = {id_courort};"\
@@ -134,8 +147,8 @@ class DbInteraction:
     def get_all_users(self):
         query = """
         select array_to_json(array_agg(lap))
-        from (select t1.name, t1.email, t2.title AS "role" 
-        from users t1 join roles t2 on t1.id_role = t2.id_role) lap;
+        from (select t1.name, t1.email, t1.user_role AS "role" 
+        from users t1) lap;
         """
         cur = self.postgres_connection.get_connection().cursor()
         cur.execute(query)
@@ -144,7 +157,7 @@ class DbInteraction:
         return res
 
     def get_user(self, mail, password):
-        query = "select name, id_user, email, password, id_role from users where email = '" + str(mail) + "' and password = '" + str(password)+"'limit 1;"
+        query = "select name, id_user, email, password, user_role from users where email = '" + str(mail) + "' and password = '" + str(password)+"'limit 1;"
         cur = self.postgres_connection.get_connection().cursor()
         cur.execute(query)
         res = cur.fetchone()
@@ -167,6 +180,17 @@ class DbInteraction:
         cur = self.postgres_connection.get_connection().cursor()
         cur.execute(query)
         res = cur.fetchone()
+        self.postgres_connection.close_connection()
+        return res
+
+    def get_roads_and_courorts(self):
+        query = """
+        select array_to_json(array_agg(lap))
+        from (select t1.name_road, t2.name_courort from roads t1 join courorts t2 on t1.id_courort = t2.id_courort) lap;
+        """
+        cur = self.postgres_connection.get_connection().cursor()
+        cur.execute(query)
+        res = cur.fetchall()
         self.postgres_connection.close_connection()
         return res
 

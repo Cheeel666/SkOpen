@@ -1,11 +1,5 @@
 <template>
     <div>
-      <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-    </div>
         <h4>Login</h4>
         <form>
             <label for="email" >E-Mail Address</label>
@@ -53,8 +47,7 @@ export default {
             localStorage.setItem('email', response
               .data.email)
             localStorage.setItem('jwt', response.data.token)
-            localStorage.setItem('admin', is_admin)
-            
+            localStorage.setItem('role', response.data.is_admin)
             if (localStorage.getItem('jwt') != null) {
               this.$emit('loggedIn')
               if (this.$route.params.nextUrl != null) {

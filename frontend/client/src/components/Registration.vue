@@ -1,11 +1,5 @@
 <template>
     <div>
-        <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-        </div>
         <h4>Register</h4>
         <form>
             <label for="name">Name</label>
@@ -62,7 +56,7 @@
                         username: this.name,
                         email: this.email,
                         password: this.password,
-                        role: 1
+                        role: "user"
                     })
                     .then(response => {
                         if(this.$route.params.nextUrl != null){

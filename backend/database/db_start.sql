@@ -39,15 +39,8 @@ create table roads(
 );
 
 --role model
-drop table if exists roles;
-create table roles (
-	id_role integer PRIMARY KEY,
-	title varchar not null,
-	permission_vis integer not null,
-	permission_change integer not null,
-	permission_mod integer not null,
-	permission_comment integer not null
-);
+
+
 --1 admin 1 1 1 1
 --2 mod 0 0 1 1
 --3 user 0 0 0 1
@@ -74,21 +67,68 @@ create table comment (
 	datetime timestamp,
 	FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
-drop table if exists action;
-create table action (
-	id_action SERIAL PRIMARY KEY,
-	description varchar not null
-);
 
-drop table if exists log;
-create table log (
+drop table if exists audit;
+create table audit (
 	id_interaction SERIAL PRIMARY KEY,
 	id_user integer NOT NULL,
-	id_action integer NOT NULL,
+	action varchar not null,
 	dt_interaction timestamp
 );
 
 
-insert into roles values (0, 'admin', 1, 1, 1, 1);
-insert into roles values (1, 'user', 0, 0, 0, 1);
-insert into users values (0, 'ilya', 'il_chel@mail.ru', '12345', 0);
+insert into users values (0, 'ilya', 'il_chel@mail.ru', '12345', 'admin');
+
+
+--triggers
+
+CREATE OR REPLACE FUNCTION users_insert_trigger_fnc()
+  RETURNS trigger AS
+$$
+BEGIN
+	INSERT INTO "audit" ("id_user", "action", "dt_interaction")
+	VALUES(NEW."id_user",'user registred' ,current_date);
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER user_insert_trigger
+  AFTER INSERT
+  ON "users"
+  FOR EACH ROW
+  EXECUTE PROCEDURE users_insert_trigger_fnc();
+
+CREATE OR REPLACE FUNCTION comments_insert_trigger_fnc()
+  RETURNS trigger AS
+$$
+BEGIN
+	INSERT INTO "audit" ("id_user", "action", "dt_interaction")
+	VALUES(NEW."id_user",'new comment' ,current_date);
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER comment_insert_trigger
+  AFTER INSERT
+  ON "comment"
+  FOR EACH ROW
+  EXECUTE PROCEDURE comments_insert_trigger_fnc();
+
+CREATE OR REPLACE FUNCTION users_delete_trigger_fnc()
+  RETURNS trigger AS
+$$
+BEGIN
+	INSERT INTO "audit" ("id_user", "action", "dt_interaction")
+	VALUES(NEW."id_user",'user deleted' ,current_date);
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER user_delete_trigger
+  AFTER delete
+  ON "users"
+  FOR EACH ROW
+  EXECUTE PROCEDURE users_delete_trigger_fnc();

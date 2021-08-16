@@ -47,11 +47,13 @@ class Server:
         self.app.add_url_rule("/get_rosa", view_func=self.get_rosa)
         self.app.add_url_rule("/get_gorod", view_func=self.get_gorod)
         self.app.add_url_rule("/get_laura", view_func=self.get_laura)
+        self.app.add_url_rule("/get_roads_and_courorts", view_func=self.get_roads_and_courorts)
         self.app.add_url_rule("/get_all_users", view_func=self.get_all_users)
         self.app.add_url_rule("/delete_user", view_func=self.delete_user, methods=['POST'])
         self.app.add_url_rule("/add_comment", view_func=self.add_comment, methods=['POST'])
         self.app.add_url_rule("/get_comments", view_func=self.get_comments, methods=['POST'])
         self.app.add_url_rule("/delete_comment", view_func=self.delete_comment, methods=['POST'])
+        self.app.add_url_rule("/make_mod", view_func=self.make_mod, methods=['POST'])
         # self.app.add_url_rule("/get_courorts", view_func=self.)
         self.app.register_error_handler(404, self.page_not_found)
 
@@ -106,6 +108,12 @@ class Server:
         email = request_body['email']
         self.db_interaction.delete_user_by_email(email)
         return f'Successfuly deleted {email}', 201
+
+    def make_mod(self):
+        request_body = dict(request.json)
+        email = request_body['email']
+        self.db_interaction.make_mod_by_email(email)
+        return f'Success {email}', 201
 
     def delete_comment(self):
         request_body = dict(request.json)
@@ -171,6 +179,9 @@ class Server:
 
     def get_laura(self):
         return jsonify(self.db_interaction.get_laura()[0])
+
+    def get_roads_and_courorts(self):
+        return jsonify(self.db_interaction.get_roads_and_courorts()[0][0])
 
 
 class WebApplication:

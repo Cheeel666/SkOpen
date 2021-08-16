@@ -1,18 +1,12 @@
 <template>
     <div class="hello">
-    <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-    </div>
         <h1>Добро пожаловать в профиль!</h1>
         <h2>{{msg}}</h2>
-        <h3>admin: {{admin}}</h3>
+        <h3>роль: {{admin}}</h3>
         <button type="submit" @click="handleSubmit">
             Выход
         </button>
-            <div v-if="admin=='true'">
+            <div v-if="admin!='user'">
                 <button type="submit" @click="adminPage">
                     admin
                 </button>
@@ -26,7 +20,7 @@ export default {
     data () {
         return {
             msg: 'Имя пользователя: ' + localStorage.getItem('user'),
-            admin: localStorage.getItem('admin'),
+            admin: localStorage.getItem('role'),
             }
     },
     methods: {

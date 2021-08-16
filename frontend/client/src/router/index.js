@@ -43,16 +43,19 @@ const router = new Router({
       path: '/resorts/Rosa',
       name: 'CourortRosa',
       component: CourortRosa,
+      meta: { requiresAuth: true },
     },
     {
       path: '/resorts/Laura',
       name: 'CourortLaura',
       component: CourortLaura,
+      meta: { requiresAuth: true },
     },
     {
       path: '/resorts/Polyana',
       name: 'CourortGorod',
       component: CourortGorod,
+      meta: { requiresAuth: true },
     },
     {
       path: '/profile',
@@ -78,7 +81,7 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       if (to.matched.some(record => record.meta.is_admin)) {
-        if (localStorage.getItem('admin') === 'false') {
+        if (localStorage.getItem('role') === 'user') {
           next({
             name: 'Profile',
           });

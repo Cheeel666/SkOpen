@@ -1,11 +1,5 @@
 <template>
   <div class="container">
-    <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-    </div>
     <div class="row">
       <div class="col-sm-10">
         <h1>Курорты</h1>

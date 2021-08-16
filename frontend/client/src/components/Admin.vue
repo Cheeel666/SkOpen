@@ -1,11 +1,5 @@
 <template>
     <div class="hello">
-        <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-        </div>
     <h1>Добро пожаловать на страницу Администратора.</h1>
     <h1>Список пользователей:</h1>
         <table class="table table-hover">
@@ -16,7 +10,24 @@
               <th scope="col">Роль</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="myRole == 'admin'">
+            <tr v-for="(user, index) in users" :key="index">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td> {{ user.role }}</td>
+              <td v-if="user.role !='admin'">
+                <button type="submit" @click="deleteUser(user.email)" class="btn btn-danger btn-sm">
+                    Удалить
+                </button>
+              </td>
+              <td v-if="user.role =='user'">
+                <button type="submit" @click="makeMod(user.email)" class="btn btn-warning btn-sm">
+                    Сделать модератором
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-if="myRole == 'mod'">
             <tr v-for="(user, index) in users" :key="index">
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
@@ -39,7 +50,8 @@ import axios from 'axios';
     export default {
         data () {
             return {
-                users: []
+                users: [],
+                myRole: localStorage.getItem('role')
             }
         },
         methods: {
@@ -56,6 +68,13 @@ import axios from 'axios';
           },
           deleteUser(email) {
             this.$http.post('//localhost:5005/delete_user', {
+            email: email,
+          })
+            this.$emit('userDeleted')
+            this.$router.go()
+          },
+          makeMod(email) {
+            this.$http.post('//localhost:5005/make_mod', {
             email: email,
           })
             this.$emit('userDeleted')

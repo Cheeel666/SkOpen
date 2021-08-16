@@ -78,7 +78,7 @@ class Users(DbModel):
     name = TextField(unique=True)
     password = TextField(column_name="password")
     email=TextField(column_name="email")
-    id_role = IntegerField(column_name="id_role")
+    user_role = TextField(column_name="user_role")
     dt_registration = DateField(column_name="dt_registration", default=datetime.now())
 
     class Meta:

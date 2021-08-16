@@ -1,11 +1,5 @@
 <template>
   <div class="container">
-    <div class="topnav">
-            <a class="active" href="/">SkOpen</a>
-            <a href="/resorts">Курорты</a>
-            <a href="/login">Вход</a>
-            <a href="/register">Регистрация</a>
-    </div>
     <div class="row">
       <div class="col-sm-10">
         <h1>Горнолыжный курорт "Лаура"</h1>
@@ -47,7 +41,8 @@
            {{comment.email}}
         </p>
         <p class="content-comment"> {{comment.text}}</p>
-        <p v-if="admin=='true'" @click="removeComment(comment.email, comment.text)"
+        <p v-if="admin!='user'"
+        @click="removeComment(comment.email, comment.text)"
         class="delete">Удалить</p>
     </div>
 </div>
@@ -63,7 +58,7 @@ export default {
     return {
       courorts: [],
       comments: [],
-      admin: localStorage.getItem('admin'),
+      admin: localStorage.getItem('role'),
     };
   },
   methods: {
