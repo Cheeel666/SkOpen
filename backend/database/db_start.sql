@@ -52,7 +52,7 @@ create table users (
 	name varchar not null,
     email varchar not null,
 	password varchar not null,
-	id_role integer not null,
+	user_role varchar not null,
 	dt_registration date,
 	FOREIGN KEY (id_role) REFERENCES roles(id_role)
 );

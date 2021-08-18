@@ -60,7 +60,7 @@ class DbInteraction:
         query_trails.execute()
 
     def delete_user_by_email(self, email):
-        query_comm = "delete from comment where id_user = (select id_user from users where email = 'a' limit 1)"
+        query_comm = "delete from comment where id_user = (select id_user from users where email = '"+email+"' limit 1)"
         cur = self.postgres_connection.get_connection().cursor()
         cur.execute(query_comm)
         self.postgres_connection.pg_conn.commit()
@@ -69,7 +69,7 @@ class DbInteraction:
         query.execute()
 
     def make_mod_by_email(self, email):
-        query_comm = "update users set user_role = 'mod' where email = '" +str(email) + "   ';"
+        query_comm = "update users set user_role = 'mod' where email = '" +str(email) + "';"
         cur = self.postgres_connection.get_connection().cursor()
         cur.execute(query_comm)
         self.postgres_connection.pg_conn.commit()
