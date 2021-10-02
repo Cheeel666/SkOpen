@@ -54,11 +54,32 @@ class Server:
         self.app.add_url_rule("/get_comments", view_func=self.get_comments, methods=['POST'])
         self.app.add_url_rule("/delete_comment", view_func=self.delete_comment, methods=['POST'])
         self.app.add_url_rule("/make_mod", view_func=self.make_mod, methods=['POST'])
+        self.app.add_url_rule("/user-perm/change", view_func=self.check_perm_create, methods=['POST'])
+        self.app.add_url_rule("/user-perm/delete", view_func=self.check_perm_delete, methods=['POST'])
+        self.app.add_url_rule("/user-perm/comment", view_func=self.check_perm_comment, methods=['POST'])
         # self.app.add_url_rule("/get_courorts", view_func=self.)
         self.app.register_error_handler(404, self.page_not_found)
 
     def page_not_found(self, error_description):
         return jsonify(error=error_description), 404
+
+    def check_perm_create(self):
+        request_body = dict(request.json)
+        login = request_body["email"]
+        perm = self.db_interaction.check_permission(login, 0)
+        return jsonify({"permission":perm})
+
+    def check_perm_comment(self):
+        request_body = dict(request.json)
+        login = request_body["email"]
+        perm = self.db_interaction.check_permission(login, 1)
+        return jsonify({"permission":perm})
+
+    def check_perm_delete(self):
+        request_body = dict(request.json)
+        login = request_body["email"]
+        perm = self.db_interaction.check_permission(login, 2)
+        return jsonify({"permission":perm})
 
     def shutdown_server(self):
         request.get(f"http//{self.host}:{self.port}/shutdown")

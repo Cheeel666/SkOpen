@@ -21,6 +21,7 @@ class DBconnection:
         )
         return self.pg_conn
 
+
     def close_connection(self):
         self.pg_conn.close()
 

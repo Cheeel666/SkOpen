@@ -100,7 +100,7 @@ export default {
               console.error(error.response);
             });
             }else{
-                alert('Введите комментарий');
+                alert('Недопустимый комментарий или вы не можете оставлять комментарии.');
             }
         },
     removeComment: function(e, t){

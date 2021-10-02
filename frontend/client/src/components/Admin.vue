@@ -114,6 +114,10 @@ import axios from 'axios';
   background-color: #04AA6D;
   color: white;
 }
+* {
+  padding:4px;
+  margin:4px;
+}
 h1, h2 {
         font-weight: normal;
     }

@@ -63,14 +63,15 @@ class Roads(DbModel):
 
 class Roles(DbModel):
     id_role = AutoField(column_name="id_role")
-    title = TextField(column_name="title")
-    permission_vis = IntegerField(column_name="permission_vis")
-    permission_change = IntegerField(column_name="permission_change")
-    permission_mod = IntegerField(column_name="permission_mod")
-    permission_comment = IntegerField(column_name="permission_comment")
+    title = TextField(column_name="name_role")
+    perm_create = IntegerField(column_name="perm_create")
+    perm_comment = IntegerField(column_name="perm_comment")
+    perm_delete = IntegerField(column_name="perm_delete")
+
 
     class Meta:
         table_name = "roles"
+
 
 
 class Users(DbModel):
@@ -78,7 +79,7 @@ class Users(DbModel):
     name = TextField(unique=True)
     password = TextField(column_name="password")
     email=TextField(column_name="email")
-    user_role = TextField(column_name="user_role")
+    id_role = IntegerField(column_name="id_role")
     dt_registration = DateField(column_name="dt_registration", default=datetime.now())
 
     class Meta:

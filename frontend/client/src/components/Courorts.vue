@@ -12,14 +12,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(courort, index) in courorts" :key="index">
-              <router-link :to="'/resorts/' + courort.name_courort">
-              <td>{{ courort.name_courort }}</td>
-              <td>{{ courort.city }}</td>
-              <td>
-                <button type="button" class="btn btn-warning btn-sm">Смотреть</button>
-              </td>
-              </router-link>
+            <tr v-for="(courort, index) in courorts" :key="index"
+            @click="goToBlabla(courort.name_courort)">
+
+              <td type="name">{{ courort.name_courort }}</td>
+              <td type="name"></td>
+              <td type="city">{{ courort.city }}</td>
             </tr>
           </tbody>
         </table>
@@ -31,7 +29,7 @@
 
 <script>
 import axios from 'axios';
-
+/* eslint-disable */
 export default {
   data() {
     return {
@@ -39,6 +37,9 @@ export default {
     };
   },
   methods: {
+    goToBlabla(id) {
+      this.$router.push('/resorts/'+id);
+    },
     getBooks() {
       const path = 'http://localhost:5005/get_courorts';
       axios.get(path)
@@ -58,30 +59,16 @@ export default {
 </script>
 
 <style>
-   .topnav {
-  background-color: #333;
-  overflow: hidden;
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
+tbody {
+  color: #3c97bf;
   text-decoration: none;
-  font-size: 17px;
-}
 
-/* Change the color of links on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
 }
-
-/* Add a color to the active/current link */
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
+a {
+  color: #3c97bf;
+    text-decoration: none;
+}
+td {
+  
 }
 </style>

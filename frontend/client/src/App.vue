@@ -24,6 +24,7 @@ export default {
 
 /* Style the links inside the navigation bar */
 .topnav a {
+  margin: 0px;
   float: left;
   color: #f2f2f2;
   text-align: center;

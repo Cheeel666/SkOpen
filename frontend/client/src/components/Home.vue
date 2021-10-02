@@ -7,8 +7,8 @@
   <div class="wrapper">
     <div class="card" v-for="(post, index) in filteredList" :key="index">
       <a v-bind:href="post.link" target="_blank">
-        <small>{{ post.road }}</small>
         {{post.resort}}
+        <small>{{ post.road }}</small>
       </a>
     </div>
   </div>
@@ -107,6 +107,9 @@ export default {
 .card {
     box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
     max-width: 124px;
+    text-decoration: none;
+    background-color: #E6E6FA;
+    padding:4px;
     margin: 12px;
     transition: .15s all ease-in-out;
     &:hover {
@@ -120,9 +123,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
-      img {
-        height: 100px;
-      }
+      
       small {
         font-size: 10px;
         padding: 4px;
@@ -147,10 +148,18 @@ export default {
   }
   div #home{
   display: flex;
+  
   align-items: center;
   justify-content: center;
   flex-direction: column;
   margin-top: 16px;
   margin-bottom: 16px;
 }
+a {
+      text-decoration: none;
+      padding: 4px;
+      color: #008B8B;
+      
+      
+    }
 </style>

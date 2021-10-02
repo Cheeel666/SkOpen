@@ -68,8 +68,38 @@ export default {
   color: white;
 }
 
- h1, h2 {
+button  {
+  margin:4px;
+	border-radius: 20px;
+	border: 1px solid #008B8B	;
+	background-color: #008B8B	;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+.hello {
+    text-align: center;
+}
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+ h1, h2, h3 {
  font-weight: normal;
+ text-align:center;
  }
  ul {
  list-style-type: none;

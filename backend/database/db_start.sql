@@ -1,81 +1,82 @@
--- ok
-drop table if exists city;
-drop table if exists country;
-create table country (
-	id_country SERIAL PRIMARY KEY,
-	name_country varchar NOT NULL
-);
---ok
-drop table if exists city;
-create table city (
-	id_city SERIAL PRIMARY KEY,
-	name_city varchar NOT NULL,
-	id_country integer NOT NULL,
-	FOREIGN KEY (id_country) REFERENCES country(id_country)
-);
-
-drop table if exists roads;
-drop table if exists courorts;
-create table courorts(
-	id_courort SERIAL PRIMARY KEY,
-	name_courort varchar NOT NULL,
-	city varchar NOT NULL,
-	visability integer
-);
-
-insert into courorts values(0, 'Rosa', 'Sochi', 1), (1, 'Laura', 'Sochi', 1), (2, 'Polyana', 'Sochi', 1);
-
-create table roads(
-	id_road serial PRIMARY KEY,
-	id_courort integer NOT NULL,
-	type_road varchar NOT NULL,
-	name_road varchar NOT NULL,
-	work_status integer NOT NULL,
-	complexity varchar,
-	lenght integer,
-	width integer,
-	worktime varchar,
-	FOREIGN KEY (id_courort) REFERENCES courorts(id_courort)
-);
-
---role model
-
-
---1 admin 1 1 1 1
---2 mod 0 0 1 1
---3 user 0 0 0 1
-
-drop table if exists comment;
-drop table if exists users;
-create table users (
-	id_user serial PRIMARY KEY,
-	name varchar not null,
-    email varchar not null,
-	password varchar not null,
-	user_role varchar not null,
-	dt_registration date,
-	FOREIGN KEY (id_role) REFERENCES roles(id_role)
-);
-
-create table comment (
-	id_comment serial PRIMARY KEY,
-	id_user integer not null,
-	id_courort integer not null,
-	content varchar not null,
-	likes integer not null,
-	visability integer not null,
-	datetime timestamp,
-	FOREIGN KEY (id_user) REFERENCES users(id_user)
-);
-
-drop table if exists audit;
-create table audit (
-	id_interaction SERIAL PRIMARY KEY,
-	id_user integer NOT NULL,
-	action varchar not null,
-	dt_interaction timestamp
-);
-
+-- -- ok
+-- drop table if exists city;
+-- drop table if exists country;
+-- create table country (
+-- 	id_country SERIAL PRIMARY KEY,
+-- 	name_country varchar NOT NULL
+-- );
+-- --ok
+-- drop table if exists city;
+-- create table city (
+-- 	id_city SERIAL PRIMARY KEY,
+-- 	name_city varchar NOT NULL,
+-- 	id_country integer NOT NULL,
+-- 	FOREIGN KEY (id_country) REFERENCES country(id_country)
+-- );
+--
+-- drop table if exists roads;
+-- drop table if exists courorts;
+-- create table courorts(
+-- 	id_courort SERIAL PRIMARY KEY,
+-- 	name_courort varchar NOT NULL,
+-- 	city varchar NOT NULL,
+-- 	visability integer
+-- );
+--
+-- insert into courorts values(0, 'Rosa', 'Sochi', 1), (1, 'Laura', 'Sochi', 1), (2, 'Polyana', 'Sochi', 1);
+--
+-- create table roads(
+-- 	id_road serial PRIMARY KEY,
+-- 	id_courort integer NOT NULL,
+-- 	type_road varchar NOT NULL,
+-- 	name_road varchar NOT NULL,
+-- 	work_status integer NOT NULL,
+-- 	complexity varchar,
+-- 	lenght integer,
+-- 	width integer,
+-- 	worktime varchar,
+-- 	FOREIGN KEY (id_courort) REFERENCES courorts(id_courort)
+-- );
+--
+-- --role model
+--
+--
+-- --1 admin 1 1 1 1
+-- --2 mod 0 0 1 1
+-- --3 user 0 0 0 1
+--
+-- drop table if exists comment;
+-- drop table if exists users;
+-- create table users (
+-- 	id_user serial PRIMARY KEY,
+-- 	name varchar not null,
+--     email varchar not null,
+-- 	password varchar not null,
+-- 	user_role varchar not null,
+-- 	dt_registration date,
+-- 	FOREIGN KEY (id_role) REFERENCES roles(id_role)
+-- );
+--
+-- create table comment (
+-- 	id_comment serial PRIMARY KEY,
+-- 	id_user integer not null,
+-- 	id_courort integer not null,
+-- 	content varchar not null,
+-- 	likes integer not null,
+-- 	visability integer not null,
+-- 	datetime timestamp,
+-- 	FOREIGN KEY(id_comment) references courorts(id_courort),
+-- 	FOREIGN KEY (id_user) REFERENCES users(id_user)
+-- );
+--
+-- drop table if exists audit;
+-- create table audit (
+-- 	id_interaction SERIAL PRIMARY KEY,
+-- 	id_user integer NOT NULL,
+-- 	action varchar not null,
+-- 	dt_interaction timestamp
+-- );
+--
 
 insert into users values (0, 'ilya', 'il_chel@mail.ru', '12345', 'admin');
 
@@ -132,3 +133,72 @@ CREATE TRIGGER user_delete_trigger
   ON "users"
   FOR EACH ROW
   EXECUTE PROCEDURE users_delete_trigger_fnc();
+
+create table courorts(
+	id_courort SERIAL PRIMARY KEY,
+	name_courort varchar NOT NULL,
+	city varchar NOT NULL,
+	visability integer
+);
+
+create table roads(
+	id_road serial PRIMARY KEY,
+	id_courort integer NOT NULL,
+	type_road varchar NOT NULL,
+	name_road varchar NOT NULL,
+	work_status integer NOT NULL,
+	complexity varchar,
+	lenght integer,
+	width integer,
+	worktime varchar,
+	FOREIGN KEY (id_courort) REFERENCES courorts(id_courort)
+);
+drop table user_role;
+drop table audit;
+drop table users;
+  create table roles(
+	id_role serial PRIMARY KEY,
+	name_role varchar,
+	perm_create int not null,
+	perm_comment int not null,
+	perm_delete int not null
+);
+
+
+create table users(
+	id_user serial PRIMARY KEY,
+	name varchar not null,
+    email varchar not null,
+	password varchar not null,
+	id_role  not null,
+	dt_registration date,
+	FOREIGN KEY(id_role) references roles(id_role)
+);
+create table user_role (
+	id_user int,
+	id_role  int,
+	FOREIGN KEY(id_user) references users(id_user),
+	FOREIGN KEY(id_role) references roles(id_role)
+);
+
+drop table if exists audit;
+create table audit (
+	id_interaction SERIAL PRIMARY KEY,
+	id_user integer NOT NULL,
+	action varchar not null,
+	dt_interaction timestamp,
+	FOREIGN KEY(id_user) REFERENCES users(id_user)
+);
+
+
+create table comment (
+	id_comment serial PRIMARY KEY,
+	id_user integer not null,
+	id_courort integer not null,
+	content varchar not null,
+	likes integer not null,
+	visability integer not null,
+	datetime timestamp,
+	FOREIGN KEY(id_courort) references courorts(id_courort),
+	FOREIGN KEY (id_user) REFERENCES users(id_user)
+);
